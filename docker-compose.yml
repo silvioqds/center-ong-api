@@ -1,0 +1,45 @@
+version: '3'
+
+networks:
+  connection:
+    driver: bridge
+
+
+services:
+  # MYSQL
+  database:
+    image: mysql:latest
+    container_name: database
+    environment:
+      MYSQL_ROOT_PASSWORD: MBAGrupo4
+      MYSQL_DATABASE: center
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: MBAGrupo4
+    volumes:
+      - mysql-data:/mysql_data:/var/lib/mysql
+    ports:
+      - "3707:3306"   
+    networks:
+      - connection
+
+  # NEST JS - API
+  app:
+    build:
+      context: .
+      dockerfile: dockerfile.dev
+    container_name: nestjs-dev-container # Movido para fora do bloco build
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules       
+    environment:
+      NODE_ENV: development
+      CHOKIDAR_USEPOLLING: "true"  
+    depends_on:
+      - database
+    networks:
+      - connection
+
+volumes:
+  mysql-data:

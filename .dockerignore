@@ -1,0 +1,5 @@
+# Arquivos e diretórios a serem ignorados durante a construção da imagem Docker
+node_modules
+npm-debug.log
+Dockerfile.dev
+.dockerignore
